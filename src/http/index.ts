@@ -5,7 +5,7 @@ import { loginRes } from '@/types/responseType.d'
 // 登录
 export function login(data: login) {
     return request<loginRes>({
-        url: '/api/users/login',
+        url: '/admin/api/users/login',
         method: 'post',
         data
     })
@@ -14,7 +14,7 @@ export function login(data: login) {
 // 注册
 export function register(data: register) {
     return request<{}>({
-        url: '/api/users/register',
+        url: '/admin/api/users/register',
         method: 'post',
         data
     })
@@ -23,7 +23,7 @@ export function register(data: register) {
 // 获取用户信息
 export function getUserInfo(data: register) {
     return request<{}>({
-        url: '/api/my/current',
+        url: '/admin/api/my/current',
         method: 'post',
         data
     })

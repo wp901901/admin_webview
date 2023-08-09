@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw,RouteRecordNormalized } from 'vue-router';
+import { createRouter, createWebHistory,createWebHashHistory, RouteRecordRaw,RouteRecordNormalized } from 'vue-router';
 import Cookies from "js-cookie";
 import Layout from '@/layout/AppLayout.vue';
 import AppMain from '@/layout/components/AppMain.vue';
@@ -93,7 +93,8 @@ export const needAuthRoutes : Array<RouteRecordRaw> = [
 // https://www.mulingyuer.com/archives/815/
 // 路由
 const router = createRouter({
-    history: createWebHistory(),
+    // history: createWebHistory(),
+    history: createWebHashHistory(),
     routes:constantRoutes,
     scrollBehavior:() => {
         return {
@@ -108,7 +109,7 @@ const whiteList: Array<string> = ['/login']
 
 // 设置路由守卫，如果没有登录只允许去到登录注册页
 router.beforeEach((to,from,next) => {
-    console.log('to',to);
+    // console.log('to',to);
     
     // 注册pinia
     const userInfo = loginUser();
