@@ -14,7 +14,7 @@ export function login(data: login) {
 // 注册
 export function register(data: register) {
     return request<{}>({
-        url: '/admin/api/users/register',
+        url: '/api/users/register',
         method: 'post',
         data
     })
@@ -23,7 +23,7 @@ export function register(data: register) {
 // 获取用户信息
 export function getUserInfo(data: register) {
     return request<{}>({
-        url: '/admin/api/my/current',
+        url: '/api/my/current',
         method: 'post',
         data
     })
