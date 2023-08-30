@@ -10,7 +10,7 @@ export const loginUser = defineStore('userInfo', {
     state: ():userInfoPinia => ({
         user:{
             avatar:'',
-            date:'',
+            date:new Date(),
             email:'',
             exp:0,
             iat:0,
@@ -40,7 +40,7 @@ export const loginUser = defineStore('userInfo', {
         clearUser(){
             this.user = {
                 avatar:'',
-                date:'',
+                date:new Date(),
                 email:'',
                 exp:0,
                 iat:0,
