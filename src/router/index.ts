@@ -1,14 +1,14 @@
-import { createRouter, createWebHistory,createWebHashHistory, RouteRecordRaw,RouteRecordNormalized } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw, RouteRecordNormalized } from 'vue-router';
 import Cookies from "js-cookie";
 import Layout from '@/layout/AppLayout.vue';
 import AppMain from '@/layout/components/AppMain.vue';
 // 导入pinia
-import {loginUser} from '@/store/users' 
-import {permissionStore} from '@/store/permission'
-import {tagView} from '@/store/tagsView'
+import { loginUser } from '@/store/users'
+import { permissionStore } from '@/store/permission'
+import { tagView } from '@/store/tagsView'
 
 // 路由信息(无需权限)
-export const constantRoutes : Array<RouteRecordRaw> = [
+export const constantRoutes: Array<RouteRecordRaw> = [
     // 不需要在这里重定向，router文件中的路由守卫会自动判断有没有登录，然后拦截跳转到登录页
     // {
     //     path: '/',
@@ -22,68 +22,92 @@ export const constantRoutes : Array<RouteRecordRaw> = [
         name: 'login',
         component: () => import('@/view/login.vue'),
         meta: {
-            title:'登录',
+            title: '登录',
             hidden: true
         }
     },
     {
-        path:'/',
-        name:'Layout',
-        component:Layout,
-        redirect:'/index',
+        path: '/',
+        name: 'Layout',
+        component: Layout,
+        redirect: '/index',
         meta: {
-            title:'首页',
-            icon:'House',
+            title: '首页',
+            icon: 'House',
             hidden: false
         },
-        children:[
+        children: [
             {
                 path: '/index',
                 component: () => import('@/view/index.vue'),
                 meta: {
-                    title:'首页',
+                    title: '首页',
                     hidden: false
                     // icon:'House'
                 }
             },
-            
+
         ]
     }
 ];
 
 // 需要权限的路由信息
-export const needAuthRoutes : Array<RouteRecordRaw> = [
+export const needAuthRoutes: Array<RouteRecordRaw> = [
     {
         path: '/user',
         name: 'User_Nav',
-        redirect:'/userInfo',
+        redirect: '/userInfo',
         component: Layout,
         meta: {
-            title:'用户',
+            title: '用户',
             hidden: false,
-            icon:'User'
+            icon: 'User'
         },
-        children:[
+        children: [
             {
                 path: '/userInfo',
-                name:'userInfo',
+                name: 'userInfo',
                 component: () => import('@/view/userInfo/index.vue'),
                 meta: {
-                    title:'我的个人信息',
+                    title: '我的个人信息',
                     hidden: false,
-                    icon:'House',
-                    roles:['superAdmin','admin','user']
+                    icon: 'House',
+                    roles: ['superAdmin', 'admin', 'user']
                 }
             },
             {
                 path: '/register',
-                name:'register',
+                name: 'register',
                 component: () => import('@/view/userInfo/register.vue'),
                 meta: {
-                    title:'用户注册页面',
+                    title: '用户注册页面',
                     hidden: false,
-                    icon:'House',
-                    roles:['superAdmin']
+                    icon: 'House',
+                    roles: ['superAdmin']
+                }
+            }
+        ]
+    },
+    {
+        path: '/store',
+        name: 'Store_Nav',
+        redirect: '/storeManage',
+        component: Layout,
+        meta: {
+            title: '店铺管理',
+            hidden: false,
+            icon: 'Shop'
+        },
+        children: [
+            {
+                path: '/storeManage',
+                name: 'storeManage',
+                component: () => import('@/view/store/storeManage.vue'),
+                meta: {
+                    title: '我的店铺信息',
+                    hidden: false,
+                    icon: 'House',
+                    roles: ['superAdmin', 'admin']
                 }
             }
         ]
@@ -95,10 +119,10 @@ export const needAuthRoutes : Array<RouteRecordRaw> = [
 const router = createRouter({
     // history: createWebHistory(),
     history: createWebHashHistory(),
-    routes:constantRoutes,
-    scrollBehavior:() => {
+    routes: constantRoutes,
+    scrollBehavior: () => {
         return {
-            top:0
+            top: 0
         }
     }
 })
@@ -108,59 +132,67 @@ const whiteList: Array<string> = ['/login']
 // const whiteList: Array<string> = ['/','/login']
 
 // 设置路由守卫，如果没有登录只允许去到登录注册页
-router.beforeEach((to,from,next) => {
+router.beforeEach((to, from, next) => {
     // console.log('to',to);
-    
+
     // 注册pinia
     const userInfo = loginUser();
     const permission = permissionStore();
     const tagsViewModule = tagView();
     document.title = to.meta.title as string;
     const hasToken = userInfo.getToken;
-    if(hasToken){
-        if(to.path === '/login'){
-            next({path:'/'});
-        }else{
+    if (hasToken) {
+        if (to.path === '/login') {
+            next({ path: '/' });
+        } else {
             const hasRoles = userInfo.getIdentity && userInfo.getIdentity.length > 0;   // 1. 根据用户是否具有权限列表，判断用户时候已经登录 
-            if(hasRoles){
+            console.log('hasRoles', hasRoles);
+            
+            if (hasRoles) {
+                // console.log('permission.routes.length', permission.routes.length,permission.routes);
+                // console.log('router.getRoutes().length', router.getRoutes().length,router.getRoutes());
+                
                 // 已经登录了，但是刷新了页面，需要重新将动态路由再添加一次
-                if(permission.routes.length === router.getRoutes().length){
-                    const roles = userInfo.getIdentity; 
-                    const accessedRoutes:any = permission.generateRoutes(roles);
-                    accessedRoutes.forEach((route:any) => {  
+                // if (permission.routes.length === router.getRoutes().length) {
+                if (router.getRoutes().length === 3) {
+                    const roles = userInfo.getIdentity;
+                    const accessedRoutes: any = permission.generateRoutes(roles);
+                    // console.log('accessedRoutes', accessedRoutes);
+                    
+                    accessedRoutes.forEach((route: any) => {
                         router.addRoute(route)
-                    })    
+                    })
                     next({ ...to, replace: true })
-                }else{
+                } else {
                     next()
                 }
-                
-            }else{
-                try{
+
+            } else {
+                try {
                     userInfo.getUserInfo();
                     const roles = userInfo.getIdentity;  // 2. 首次登录从用户信息中获取用户权限列表
-                    const accessedRoutes:any = permission.generateRoutes(roles);    // 3. 根据用户权限列表生成用户可访问动态路由表
-                    accessedRoutes.forEach((route:any) => {   // 返回的是一个数组，需要遍历添加路由才能访问
+                    const accessedRoutes: any = permission.generateRoutes(roles);    // 3. 根据用户权限列表生成用户可访问动态路由表
+                    accessedRoutes.forEach((route: any) => {   // 返回的是一个数组，需要遍历添加路由才能访问
                         router.addRoute(route)  // 4. 将用户动态路由表挂载到 router
                     })
                     // router.addRoute(accessedRoutes);    
                     next({ ...to, replace: true })   // 动态路由添加成功之后，才跳转
-                }catch (error){
+                } catch (error) {
                     userInfo.clearToken();
                     userInfo.clearUser();
                     Cookies.remove('jwtToken')
-                    next({path:'/login'})
+                    next({ path: '/login' })
                 }
             }
-             // 添加路由，做历史记录固钉
-             tagsViewModule.addVisitedView(to)
+            // 添加路由，做历史记录固钉
+            tagsViewModule.addVisitedView(to)
         }
-    }else{
+    } else {
         // has no token
         if (whiteList.indexOf(to.path) !== -1) {
             next()
         } else {
-            next({path:'/login'})
+            next({ path: '/login' })
         }
     }
 })
@@ -168,11 +200,11 @@ router.beforeEach((to,from,next) => {
 
 // 路由重置
 // https://blog.csdn.net/qq_58061710/article/details/131763236
-export function resetRouter(){
+export function resetRouter() {
     // 获取所有路由
-    router.getRoutes().forEach((route)=>{
-        const {name} = route;
-        if(name && whiteList.includes(name as string)){     //路由不属于白名单,则删除
+    router.getRoutes().forEach((route) => {
+        const { name } = route;
+        if (name && whiteList.includes(name as string)) {     //路由不属于白名单,则删除
             // 如果匹配到路由的name，则根据name删除路由
             router.hasRoute(name) && router.removeRoute(name);
         }
