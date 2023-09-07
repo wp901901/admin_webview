@@ -4,6 +4,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosRequestConfig, A
 import { ElLoading,ElMessage } from 'element-plus'
 import { httpRes } from '@/types/responseType'
 import Cookies from "js-cookie";
+import {loginUser} from '@/store/users' // 导入pinia
 
 const createAxios: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -49,9 +50,15 @@ createAxios.interceptors.response.use(
       // }
       
       // 如果token失效，则清除cookiejs
-      if(response.data.code === 401){
+      if(response.data.code === 5002){
+        // 注册pinia
+        const userPinia = loginUser(); // 注册pinia
         ElMessage.error('请重新登录')
-        Cookies.remove('jwtToken')
+        userPinia.clearUser();
+        userPinia.clearToken();
+        sessionStorage.removeItem('userInfo');
+        Cookies.remove('jwtToken');
+        // router.replace({path:'/login'});
         return Promise.reject('请重新登录');
       }
 
