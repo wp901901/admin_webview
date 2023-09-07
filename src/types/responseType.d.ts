@@ -11,7 +11,7 @@ export interface loginRes {
 
 export interface userInfo {
     avatar:string
-    date:Date
+    date:Date|string
     email:string
     exp:number
     iat:number
