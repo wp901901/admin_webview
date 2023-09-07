@@ -109,7 +109,18 @@ export const needAuthRoutes: Array<RouteRecordRaw> = [
                     icon: 'House',
                     roles: ['superAdmin', 'admin']
                 }
-            }
+            },
+            {
+                path: '/storeEdit',
+                name: 'storeEdit',
+                component: () => import('@/view/store/storeEdit.vue'),
+                meta: {
+                    title: '店铺设置',
+                    hidden: false,
+                    icon: 'House',
+                    roles: ['superAdmin', 'admin']
+                }
+            },
         ]
     },
 ]
