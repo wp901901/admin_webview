@@ -116,7 +116,7 @@ export const needAuthRoutes: Array<RouteRecordRaw> = [
                 component: () => import('@/view/store/storeEdit.vue'),
                 meta: {
                     title: '店铺设置',
-                    hidden: false,
+                    hidden: true,
                     icon: 'House',
                     roles: ['superAdmin', 'admin']
                 }

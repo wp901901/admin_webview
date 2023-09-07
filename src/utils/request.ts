@@ -6,7 +6,6 @@ import { httpRes } from '@/types/responseType'
 import {loginUser} from '@/store/users' // 导入pinia
 import { useRouter,Router} from 'vue-router'
 import Cookies from "js-cookie";
-import {loginUser} from '@/store/users' // 导入pinia
 
 const createAxios: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -56,7 +55,7 @@ createAxios.interceptors.response.use(
         loadingInstance.close()
         const userPinia = loginUser(); // 注册pinia
         const router = useRouter();
-        ElMessage.error('请重新登录')
+        // ElMessage.error('请重新登录')
         userPinia.clearUser();
         userPinia.clearToken();
         sessionStorage.removeItem('userInfo');
