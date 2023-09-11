@@ -60,7 +60,7 @@ createAxios.interceptors.response.use(
         userPinia.clearToken();
         sessionStorage.removeItem('userInfo');
         Cookies.remove('jwtToken');
-        router.replace({path:'/login'});
+        router.push({path:'/login'});
         return Promise.reject('请重新登录');
       }
 
