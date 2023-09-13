@@ -55,6 +55,8 @@ createAxios.interceptors.response.use(
         loadingInstance.close()
         const userPinia = loginUser(); // 注册pinia
         const router = useRouter();
+        console.log('router',router);
+        
         // ElMessage.error('请重新登录')
         userPinia.clearUser();
         userPinia.clearToken();

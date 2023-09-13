@@ -42,7 +42,8 @@
 <script lang="ts" setup>
 import { getAllStoreList } from '@/http/store'
 import { allStoreTabelList } from "@/types/responseType.d";
-import { ref,reactive,Ref } from "vue";
+import { ref,reactive } from "vue";
+import type {Ref} from 'vue'
 import { useRouter } from 'vue-router';
 let storeTaberData:Ref<allStoreTabelList> = ref([]);
 const router = useRouter();
