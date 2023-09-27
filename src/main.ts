@@ -8,8 +8,9 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate)  // pinia数据持久化
-
-
+// 配置moment时间转换插件
+import moment from 'moment';
+moment.locale('zh-cn');
 const app = createApp(App);
 // 全局注册El-icon
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
