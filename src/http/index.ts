@@ -28,3 +28,12 @@ export function getUserInfo(data: register) {
         data
     })
 }
+
+export function upload(data: any) {
+    return request({
+        url: '/admin/api/closet/uploadImg',
+        method: 'post',
+        headers:{'content-type': 'multipart/form-data'},
+        data
+    })
+}

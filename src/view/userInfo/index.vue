@@ -20,7 +20,7 @@ import { userInfoPinia } from '@/types/responseType.d'
 const userPinia = loginUser();
 const userInfo = userPinia.getterUserInfo;
 
-const dispostDate = computed(()=>{
+const dispostDate:any = computed(()=>{
     return (time:Date) =>{
         const date = new Date(time)
         const year = date.getUTCFullYear();
